@@ -39,10 +39,32 @@ Airplane.prototype.land = function () {
         + It should return a string with `name` and `age`. Example: "Mary, 50"
 */
 
-function Person() {
-
+function Person(name,age) {
+this.name = name;
+this.age = age;
+this.stomach = [];
 }
-
+Person.prototype = {
+  constructor: Person,
+  eat: function(somefood){
+    if (this.stomach.length < 10){
+      this.stomach.push(somefood);
+    }
+  },
+  poop : function(){
+    this.stomach = [];
+  },
+  toString: function(){
+    return `${this.name}, ${this.age}`
+  }
+}
+let human = new Person('jack', 21)
+human.eat('burgers');
+human.eat('pizza');
+//console.log(human);
+human.poop();
+//console.log(human);
+//console.log(human.toString())
 /*
   TASK 2
     - Write a Car constructor that initializes `model` and `milesPerGallon` from arguments.
@@ -57,9 +79,40 @@ function Person() {
         + The `drive` method should return a string "I ran out of fuel at x miles!" x being `odometer`.
 */
 
-function Car() {
-
+function Car(model,milesPerGallon) {
+  this.model = model;
+  this.milesPerGallon = milesPerGallon;
+  this.tank = 0;
+  this.odometer = 0;
 }
+Car.prototype={
+  constructor: Car,
+  fill: function(gallons){
+   return  this.tank = this.tank + gallons; 
+  },
+  drive(distance){
+    let drivenGallons = distance/this.milesPerGallon;
+    if(this.tank > drivenGallons){
+      this.tank -=drivenGallons;
+      this.odometer +=distance;
+    } else {
+       let theDiffrenceGallons = drivenGallons - this.tank
+       let unDrivenDistance = this.milesPerGallon * theDiffrenceGallons;
+       let drivenDistance = distance -unDrivenDistance;
+       this.tank = 0;
+       this.odometer += drivenDistance
+       return `I ran out of fuel at ${this.odometer} miles!`;
+    }
+  }
+}
+
+// let mycar = new Car('Hyundai', 25);
+// mycar.fill(10);
+// console.log(mycar);
+// console.log(mycar.drive(2));
+// console.log(mycar);
+
+// console.log(mycar.drive())
 
 /*
   TASK 3
@@ -68,18 +121,28 @@ function Car() {
     - Besides the methods on Person.prototype, babies have the ability to `.play()`:
         + Should return a string "Playing with x", x being the favorite toy.
 */
-function Baby() {
-
+function Baby(name, age, favoriteToy) {
+  Person.call(this, name, age, favoriteToy);
+  this.favoriteToy = favoriteToy;
 }
+Baby.prototype = Person.prototype;
+Baby.prototype.play = function(){
+  return `playing with ${this.favoriteToy}`
+}
+// let child = new Baby('johny', 4, 'legos');
+// console.log(child)
+// child.eat('pizza');
+// console.log(child.play());
+// console.log(child);
 
 /* 
   TASK 4
 
   In your own words explain the four principles for the "this" keyword below:
-  1. 
-  2. 
-  3. 
-  4. 
+  1. the key word this could mean several things it does not matter where it is declared but its more important the location where its called.
+  2. when using the key word new this inside the function will refer to the object that will be made using the new constructor speacial key.
+  3. if the function is called using call or apply or bind this also woll have a different meaning 
+  4. when you run this in the global scope you will get the window object which is where this was called same principle appies with functions its where you call your this that counts not where you declare it;
 */
 
 
